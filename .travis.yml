@@ -1,0 +1,11 @@
+language: node_js
+sudo: false
+node_js:
+- 4
+
+env:
+  global:
+  - SAUCE_USERNAME=aria-listbox
+  - secure: GLt1hC6fYF7/IWxTweP6AWJdt/yn5ggZwI8qfBMcmwiBc/acfc91oXJXEZ8ONvolZ/5dXIlIaK6Uw/gNNxxwz+pTf7lQs24EXPXK4nlDw/bceNmRGnroYKF95Odaqkh/bw7/MVgyN/TxKW7HZ/B3DR+2ehUD5zhTr6M4Oc7m0OJdhoozcSGZb54ufkcou52QCYDQaSv0ntXqVvPr6Zz3FPCaYmzHMNRwl9xqQyfNLsHNIl/5kXw94JNuPO+IHaRkLgds2UQBQthYcPk6AXMEJg7JJlCnb26pPzEeAew/Zx1DTNqhsWG0iLPkF2JcW8nTrVvjeXuf6bwD2zbLVF2NUGBvHhRC7ePV1YJzG47LNJaXLtpoH9sPFTyYOTT9GmXXcNHfDxPxFC6IIQItqfhDQuA2CrTLbz80YmutfXCcthFMsxOOfcS0zw2j1YqS1P37StAemN8p4+TPgbPTWQyhHfIzjYl9oYK6xqwAP+XcRP+7T483j0JayOcFtNXlpgd3Yo72kofOkRpTjD6dKnW12tOdTPijMmsioiFq00/uxsIzYQDb/1iQmQ8+8wyrzt5WsnDAi+L6eNuNbAnbbN9g68qAVc+EwPcEts4ieDPLAINh4mWR4V/SzrxspO30FsOO2gfFE3v300Ps33r6roznAeSRz4Jgm80Lpmv9QaeAP64=
+
+script: npm test

@@ -1,0 +1,31 @@
+{
+  "name": "knockout-choose",
+  "main": "choose.js",
+  "homepage": "https://github.com/nathanboktae/frypan-knockout-grid",
+  "authors": [
+    "Nathan Black <nathan@nathanblack.org>"
+  ],
+  "description": "A lightweight and powerful select alternative to let users choose items from many options",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "select",
+    "choose",
+    "options",
+    "knockout",
+    "knockout-plugin",
+    "knockout-component"
+  ],
+  "license": "ISC",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "Gruntfile.js",
+    "bower_components",
+    "tests",
+    "example.html"
+  ]
+}

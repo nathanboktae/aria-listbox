@@ -1,0 +1,31 @@
+{
+  "name": "aria-listbox",
+  "version": "0.1.0",
+  "description": "Make your listbox compliant with aria-listbox with keyboard and mouse support.",
+  "main": "aria-listbox.js",
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "chai-dom": "^1.0.0",
+    "grunt": "^0.4.5",
+    "grunt-contrib-connect": "^0.11.2",
+    "grunt-saucelabs": "^8.6.1",
+    "mocha": "^2.2.5",
+    "mocha-phantomjs": "^4.0.0"
+  },
+  "scripts": {
+    "test": "mocha-phantomjs tests/tests.html && (node -e \"require('grunt').tasks(['test']);\" || true)"
+  },
+  "keywords": [
+    "aria",
+    "listbox",
+    "aria-listbox",
+    "keyboard",
+    "key-bindings",
+    "web-component",
+    "accessibility",
+    "select",
+    "vanilla"
+  ],
+  "author": "Nathan Black <nathan@nathanblack.org>",
+  "license": "ISC"
+}
