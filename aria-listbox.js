@@ -24,6 +24,34 @@
         options[0].setAttribute('tabindex', '0')
       }
     }
+
+    function select(child) {
+      if (el.getAttribute('aria-multiselect') !== 'true') {
+        Array.prototype.forEach.call(el.querySelectorAll('[aria-selected="true"]'), function(n) {
+          n.removeAttribute('aria-selected')
+        })
+      } else if (child.getAttribute('aria-selected') === 'true') {
+        child.removeAttribute('tabindex')
+        child.removeAttribute('aria-selected')
+        return
+      }
+      Array.prototype.forEach.call(el.querySelectorAll('[tabindex]'), function(n) {
+        n.removeAttribute('tabindex')
+      })
+      child.setAttribute('aria-selected', 'true')
+      child.setAttribute('tabindex', '0')
+    }
+
+    el.addEventListener('click', function(e) {
+      var optionEl = e.target
+      while (optionEl && optionEl.getAttribute('role') !== 'option') {
+        optionEl = optionEl.parentElement
+      }
+
+      if (optionEl) {
+        select(optionEl)
+      }
+    })
   }
 
 })
