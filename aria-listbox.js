@@ -45,18 +45,28 @@
     }
 
     function select(child) {
-      if (el.getAttribute('aria-multiselect') !== 'true') {
+      var multiselect = el.getAttribute('aria-multiselect') === 'true', nextSelected
+
+      clearTabIndexes()
+      if (!multiselect) {
         Array.prototype.forEach.call(el.querySelectorAll('[aria-selected="true"]'), function(n) {
           n.removeAttribute('aria-selected')
         })
-      } else if (child.getAttribute('aria-selected') === 'true') {
-        child.removeAttribute('tabindex')
-        child.removeAttribute('aria-selected')
-        return
       }
-      clearTabIndexes()
-      child.setAttribute('aria-selected', 'true')
-      child.setAttribute('tabindex', '0')
+
+      if (multiselect && child.getAttribute('aria-selected') === 'true') {
+        child.removeAttribute('aria-selected')
+        nextSelected = el.querySelector('[aria-selected="true"]') || el.querySelector('[role="option"]')
+        nextSelected && nextSelected.setAttribute('tabindex', '0')
+      } else {
+        child.setAttribute('aria-selected', 'true')
+        child.setAttribute('tabindex', '0')
+      }
+
+      var evt = document.createEvent('CustomEvent')
+      evt.initEvent('selection-changed', true, true)
+      evt.selection = multiselect ? el.querySelectorAll('[aria-selected="true"]') : child
+      el.dispatchEvent(evt)
     }
 
     function optionNode(e) {
