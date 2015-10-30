@@ -60,9 +60,9 @@ describe('aria-listbox', function() {
     }).should.throw('The listbox container element must be the first parameter to AriaListbox')
   })
 
-  it('should add [role="aria-listbox"] on the element', function() {
+  it('should add [role="listbox"] on the element', function() {
     testSetup()
-    testEl.should.have.attribute('role', 'aria-listbox')
+    testEl.should.have.attribute('role', 'listbox')
   })
 
   it('should make the first aria-selected option tabbable if available, else the first role="option"', function() {

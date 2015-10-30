@@ -22,7 +22,7 @@
       })
     }
 
-    el.setAttribute('role', 'aria-listbox')
+    el.setAttribute('role', 'listbox')
     opts = opts || {}
     opts.prevKeys = normalizeKeyOptions(opts.prevKeys, [38])
     opts.nextKeys = normalizeKeyOptions(opts.nextKeys, [40])
