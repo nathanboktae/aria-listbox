@@ -4,11 +4,11 @@
   } else if (typeof exports === 'object' && typeof module === 'object') {
     module.exports = factory
   } else {
-    window.AriaListbox = factory()
+    window.ariaListbox = factory()
   }
 })(function() {
 
-  return function AriaListbox(el, opts) {
+  return function(el, opts) {
     if (!(el instanceof HTMLElement)) {
       throw new Error('The listbox container element must be the first parameter to AriaListbox')
     }

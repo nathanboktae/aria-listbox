@@ -1,5 +1,5 @@
 describe('aria-listbox', function() {
-  var testEl, listbox, testSetup = function(opts) {
+  var testEl, testSetup = function(opts) {
     opts = opts || {}
     testEl = document.createElement(opts.tag || 'ul')
     if (opts.multiselect) {
@@ -14,7 +14,7 @@ describe('aria-listbox', function() {
     }
 
     document.body.appendChild(testEl)
-    listbox = new AriaListbox(testEl, Object.keys(opts).length && opts)
+    ariaListbox(testEl, Object.keys(opts).length && opts)
   },
   click = function(el) {
     var evt = document.createEvent('MouseEvents')
@@ -56,7 +56,7 @@ describe('aria-listbox', function() {
 
   it('should throw if not provided a container element', function() {
     (function() {
-      new AriaListbox()
+      ariaListbox()
     }).should.throw('The listbox container element must be the first parameter to AriaListbox')
   })
 
@@ -250,4 +250,6 @@ describe('aria-listbox', function() {
       listener.lastCall.args[0].selection.should.be.empty
     })
   })
+
+  it('can switch between single select and multiselect mode')
 })
