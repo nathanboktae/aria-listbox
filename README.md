@@ -58,7 +58,7 @@ Since `aria-selected` does not keep state, you can change the options, what is s
 
 #### `selection-changed` Event
 
-`aria-selected` will fire a `selection-changed` event whenever the selection changes. The `selection` property will contain the new selection, either as a single element with single selection, or a `NodeList` when using multiselect.
+`aria-selected` will fire a `selection-changed` event whenever the selection changes. The `selection` property will contain the new selection. For multiselect, this is a `NodeList`, and additionally `removed` or `added` will be set to the `HTMLElement` that was added or removed from the selection.
 
 ### Installation
 

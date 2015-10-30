@@ -1,6 +1,6 @@
 {
   "name": "aria-listbox",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Make your listbox compliant with aria-listbox with keyboard and mouse support.",
   "main": "aria-listbox.js",
   "devDependencies": {

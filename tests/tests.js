@@ -178,53 +178,69 @@ describe('aria-listbox', function() {
   describe('multiselect', function() {
     it('should set aria-selected on an option when it is clicked, leaving other selections', function() {
       testSetup({ multiselect: true })
+
       click('li:first-child')
       selectedNodes().should.deep.equal(['cherry'])
+
       click('li:nth-child(4)')
       selectedNodes().should.deep.equal(['cherry', 'watermelon'])
     })
 
     it('should toggle a selection when clicked again', function() {
       testSetup({ multiselect: true })
+
       click('li:first-child')
       selectedNodes().should.deep.equal(['cherry'])
       textNodesFor('[tabindex="0"]').should.deep.equal(['cherry'])
+
       click('li:nth-child(4)')
       selectedNodes().should.deep.equal(['cherry', 'watermelon'])
       textNodesFor('[tabindex="0"]').should.deep.equal(['watermelon'])
+
       click('li:first-child')
       selectedNodes().should.deep.equal(['watermelon'])
       textNodesFor('[tabindex="0"]').should.deep.equal(['watermelon'])
+
       click('li:nth-child(4)')
       selectedNodes().should.be.empty
-      textNodesFor('[tabindex="0"]').should.deep.equal(['cherry'])
+      textNodesFor('[tabindex="0"]').should.deep.equal(['watermelon'])
     })
 
     it('should allow multiple items to be selected by keyboard', function() {
       testSetup({ multiselect: true })
+
       keydown('li:nth-child(4)', 13)
       selectedNodes().should.deep.equal(['watermelon'])
+
       keydown('li:first-child span', 32)
       selectedNodes().should.deep.equal(['cherry', 'watermelon'])
     })
 
     it('should toggle a selected item when selected by keyboard', function() {
       testSetup({ multiselect: true })
+
       keydown('li:nth-child(2)', 32)
       selectedNodes().should.deep.equal(['orange'])
       textNodesFor('[tabindex="0"]').should.deep.equal(['orange'])
+
       keydown('li:nth-child(3)', 13)
       selectedNodes().should.deep.equal(['orange', 'banana'])
       textNodesFor('[tabindex="0"]').should.deep.equal(['banana'])
+      document.activeElement.textContent.should.equal('banana')
+
+      keydown('li:nth-child(3)', 38)
       keydown('li:nth-child(2) span', 13)
       selectedNodes().should.deep.equal(['banana'])
-      textNodesFor('[tabindex="0"]').should.deep.equal(['banana'])
+      textNodesFor('[tabindex="0"]').should.deep.equal(['orange'])
+      document.activeElement.textContent.should.equal('orange')
+
+      keydown('li:nth-child(2)', 40)
       keydown('li:nth-child(3)', 13)
       selectedNodes().should.be.empty
-      textNodesFor('[tabindex="0"]').should.deep.equal(['cherry'])
+      textNodesFor('[tabindex="0"]').should.deep.equal(['banana'])
     })
 
-    it('should fire an event when the selection changes with the NodeList of selections', function() {
+    it('should fire an event when the selection changes with the NodeList of selections, and which element was added or removed', function() {
       var listener = sinon.spy()
       testSetup({ multiselect: true })
       testEl.addEventListener('selection-changed', listener)
@@ -236,18 +252,22 @@ describe('aria-listbox', function() {
       event.selection.should.have.length(1)
       event.selection[0].textContent.should.equal('orange')
       event.selection[0].tagName.should.equal('LI')
+      event.added.textContent.should.equal('orange')
 
       click('li:nth-child(5)')
       listener.should.have.been.calledTwice
       Array.prototype.map.call(listener.lastCall.args[0].selection, function(n) { return n.textContent })
         .should.deep.equal(['orange', 'pineapple'])
+      listener.lastCall.args[0].added.textContent.should.equal('pineapple')
 
       click('li:nth-child(2)')
       Array.prototype.map.call(listener.lastCall.args[0].selection, function(n) { return n.textContent })
         .should.deep.equal(['pineapple'])
+      listener.lastCall.args[0].removed.textContent.should.equal('orange')
 
       click('li:nth-child(5)')
       listener.lastCall.args[0].selection.should.be.empty
+      listener.lastCall.args[0].removed.textContent.should.equal('pineapple')
     })
   })
 

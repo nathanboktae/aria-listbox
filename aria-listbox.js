@@ -47,24 +47,28 @@
     function select(child) {
       var multiselect = el.getAttribute('aria-multiselect') === 'true', nextSelected
 
-      clearTabIndexes()
       if (!multiselect) {
         Array.prototype.forEach.call(el.querySelectorAll('[aria-selected="true"]'), function(n) {
           n.removeAttribute('aria-selected')
         })
       }
 
-      if (multiselect && child.getAttribute('aria-selected') === 'true') {
-        child.removeAttribute('aria-selected')
-        nextSelected = el.querySelector('[aria-selected="true"]') || el.querySelector('[role="option"]')
-        nextSelected && nextSelected.setAttribute('tabindex', '0')
-      } else {
-        child.setAttribute('aria-selected', 'true')
-        child.setAttribute('tabindex', '0')
-      }
-
       var evt = document.createEvent('CustomEvent')
       evt.initEvent('selection-changed', true, true)
+
+      if (multiselect && child.getAttribute('aria-selected') === 'true') {
+        child.removeAttribute('aria-selected')
+        evt.removed = child
+      } else {
+        clearTabIndexes()
+        child.setAttribute('aria-selected', 'true')
+        child.setAttribute('tabindex', '0')
+        child.focus()
+        if (multiselect) {
+          evt.added = child
+        }
+      }
+
       evt.selection = multiselect ? el.querySelectorAll('[aria-selected="true"]') : child
       el.dispatchEvent(evt)
     }
@@ -101,6 +105,9 @@
     el.addEventListener('keydown', function(e) {
       var optionEl = optionNode(e),
           code = e.keyCode || e.code
+
+      if (!optionEl) return
+
       if (opts.selectKeys.indexOf(code) !== -1) {
         select(optionEl)
       } else if (e.target && e.target.getAttribute('role') === 'option') {
