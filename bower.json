@@ -1,23 +1,26 @@
 {
-  "name": "knockout-choose",
-  "main": "choose.js",
-  "homepage": "https://github.com/nathanboktae/frypan-knockout-grid",
+  "name": "aria-listbox",
+  "main": "aria-listbox.js",
+  "homepage": "https://github.com/nathanboktae/aria-listbox",
   "authors": [
     "Nathan Black <nathan@nathanblack.org>"
   ],
-  "description": "A lightweight and powerful select alternative to let users choose items from many options",
+  "description": "Make your listbox compliant with aria-listbox with keyboard and mouse support.",
   "moduleType": [
     "amd",
     "globals",
     "node"
   ],
   "keywords": [
+    "aria",
+    "listbox",
+    "aria-listbox",
+    "keyboard",
+    "key-bindings",
+    "web-component",
+    "accessibility",
     "select",
-    "choose",
-    "options",
-    "knockout",
-    "knockout-plugin",
-    "knockout-component"
+    "vanilla"
   ],
   "license": "ISC",
   "ignore": [
