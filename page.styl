@@ -1,0 +1,62 @@
+// Grecian Holiday
+backg-color = hsla(32.7, 50.0%, 98.4%, 1.0) //#f4eade
+text-color = #2f496e
+header-color = #2988bc
+accent-color = #ed8c72
+
+body
+  font-family Muli
+  color text-color
+  background-color backg-color
+  font-size 14px
+
+article
+  margin 0 5%
+  height 100%
+  script + h3, pre + h3
+    margin-top 3em
+  choose:last-of-type
+    margin-bottom 2em
+  @media (max-width: 600px)
+    margin 0 4px
+
+h1, h2
+  font-family 'Julius Sans One'
+  text-transform lowercase
+  color header-color
+
+p, h3, h4
+  font-weight 300
+
+h3
+  color accent-color
+
+a, a:visited
+  color header-color
+
+ul, li
+  margin 0
+  padding 0
+li
+  list-style none
+  line-height 1.5em
+  &::before
+    content ' '
+    margin-right 1em
+  &[aria-selected]
+    color backg-color
+    background-color text-color
+
+section
+  display flex
+  > div:first-child
+    flex 1 1 40%
+    margin-right 1em
+  > div:nth-child(2)
+    flex 1 1 60%
+  h4
+    margin 0
+  @media (max-width: 1000px)
+    flex-direction column
+    > div
+      flex 1 1 auto

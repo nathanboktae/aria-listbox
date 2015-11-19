@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+  <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+  <meta name="viewport" content="width=device-width">
+
+  <title>Knockout Choose - A modern, lean, and powerful select replacement as a knockout component</title>
+
+  <link href="page.css" rel="stylesheet" type="text/css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/languages/javascript.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/hybrid.min.css">
+<link href='https://fonts.googleapis.com/css?family=Julius+Sans+One|Muli:400,300' rel='stylesheet' type='text/css'>
+
+  <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+  <main>
+    <article>
+      <h1>Aria Listbox</h1>
+      <p>Easily turn any list of options into an <a href="http://www.w3.org/TR/wai-aria/roles#listbox">ARIA-compliant listbox</a> with keyboard (tab and selection change) and mouse (and thus touch) support..</p>
+
+      <p>It has no dependencies and keeps no state, so it works easily with your favorite framework or library for building your app.</p>
+
+      <h2>Documentation</h2>
+      <p>See <a href="https://github.com/nathanboktae/aria-listbox">GitHub</a> for the latest documentation and source</p>
+
+      <h2>Interactive Examples</h2>
+      <h3>Single select</h3>
+
+      <script src="aria-listbox-0.1.3.js"></script>
+
+      <section>
+<div class="fruits"><h4>Choose a Fruit</h4>
+<ul>
+  <li role="option">Apple</li>
+  <li role="option">Banana</li>
+  <li role="option">Pineapple</li>
+  <li role="option">Watermelon</li>
+  <li role="option">Orange</li>
+  <li role="option" aria-selected="true">Cherry</li>
+  <li role="option">Strawberry</li>
+  <li role="option">Blueberry</li>
+</ul></div>
+      <div>
+        <h4>Current Live DOM</h4>
+        <pre class="fruits"><code></code></pre>
+      </div>
+      </section>
+
+      <h3>Multi select</h3>
+      <section>
+<div class="menu"><h4>Choose items to Order</h4>
+<ul aria-multiselect="true">
+  <li>
+    <h4>Poultry</h4>
+    <ul>
+      <li role="option">Turkey Sandwich</li>
+      <li role="option">Fried Chicken</li>
+      <li role="option">Chicken Curry</li>
+    </ul>
+  </li>
+  <li>
+    <h4>Beef</h4>
+    <ul>
+      <li role="option" aria-selected="true">Beef with Brocolli</li>
+      <li role="option">New York Steak</li>
+      <li role="option">Cheeseburger</li>
+      <li role="option">Beef Fajitas</li>
+    </ul>
+  </li>
+  <li>
+    <h4>Vegetarian</h4>
+    <ul>
+      <li role="option">Tofu Miso Soup</li>
+      <li role="option" aria-selected="true">Apple Cranberry Salad</li>
+      <li role="option">Yellow Curry</li>
+      <li role="option">Bibimpap</li>
+      <li role="option">Oatmeal Cookie</li>
+    </ul>
+  </li>
+</ul></div>
+      <div>
+        <h4>Current Live DOM</h4>
+        <pre class="menu"><code></code></pre>
+      </div>
+      </section>
+
+      <script>
+        ['fruits', 'menu'].forEach(function(example) {
+          var ex = document.querySelector('div.' + example),
+              exCode = document.querySelector('pre.' + example + ' code')
+
+          var observer = new MutationObserver(function(/*mutations*/) {
+            exCode.innerText = ex.innerHTML
+            hljs.highlightBlock(exCode)
+          })
+          observer.observe(ex, {
+            subtree: true,
+            attributes: true
+          })
+
+          ariaListbox(ex.querySelector('ul'))
+        })
+      </script>
+
+      <h3>Installation</h3>
+
+      <h4><a href="https://www.npmjs.com/package/aria-listbox">npm</a><h4>
+      <pre><code>npm install --save aria-listbox</code></pre>
+
+      <h4><a href="http://bower.io/search/?q=aria-listbox">bower</a><h4>
+      <pre><code>bower install --save aria-listbox</code></pre>
+
+      <p>Source on <a href="https://github.com/nathanboktae/aria-listbox">GitHub</a></p>
+
+    </article>
+  </main>
+</body>
+</html>
