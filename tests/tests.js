@@ -6,9 +6,11 @@ describe('aria-listbox', function() {
       testEl.setAttribute('aria-multiselect', 'true')
     }
     testEl.innerHTML = opts.innerHTML ||
-      ['cherry', 'orange', 'banana', 'watermelon', 'pineapple'].map(function(fruit) {
-        return '<li role="option"><span>' + fruit + '<span></li>'
-      })
+      ['cherry', 'orange', 'banana', 'watermelon', 'pineapple'].map(function(fruit, idx) {
+        return idx === 1 || idx === 2 ?
+          '<li role="option" aria-disabled="true"><span>' + fruit + '<span></li>' : 
+          '<li role="option"><span>' + fruit + '<span></li>'
+      }).join('')
     if (opts.selected) {
       testEl.children[opts.selected].setAttribute('aria-selected', 'true')
     }
@@ -73,14 +75,11 @@ describe('aria-listbox', function() {
     attributesFor('li', 'tabindex').should.deep.equal([null, null, '0', null, null])
   })
 
-  it('should set focus and tabindex=0 on the next role="option" element on arrow down, if it exists', function() {
+  it('should set focus and tabindex=0 on the next role="option":not([aria-disabled="true"]) element on arrow down, if it exists', function() {
     testSetup()
     keydown('li:first-child', 40)
-    textNodesFor('[tabindex="0"]').should.deep.equal(['orange'])
-    document.activeElement.textContent.should.equal('orange')
-    keydown(document.activeElement, 40)
-    textNodesFor('[tabindex="0"]').should.deep.equal(['banana'])
-    keydown(document.activeElement, 40)
+    textNodesFor('[tabindex="0"]').should.deep.equal(['watermelon'])
+    document.activeElement.textContent.should.equal('watermelon')
     keydown(document.activeElement, 40)
     textNodesFor('[tabindex="0"]').should.deep.equal(['pineapple'])
     keydown(document.activeElement, 40)
@@ -88,13 +87,11 @@ describe('aria-listbox', function() {
     document.activeElement.textContent.should.equal('pineapple')
   })
 
-  it('should set focus and tabindex=0 on the previous role="option" element on arrow up, if it exists', function() {
+  it('should set focus and tabindex=0 on the previous role="option":not([aria-disabled="true"]) element on arrow up, if it exists', function() {
     testSetup()
-    keydown('li:nth-child(4)', 38)
-    textNodesFor('[tabindex="0"]').should.deep.equal(['banana'])
-    document.activeElement.textContent.should.equal('banana')
-    keydown(document.activeElement, 38)
-    textNodesFor('[tabindex="0"]').should.deep.equal(['orange'])
+    keydown('li:nth-child(5)', 38)
+    textNodesFor('[tabindex="0"]').should.deep.equal(['watermelon'])
+    document.activeElement.textContent.should.equal('watermelon')
     keydown(document.activeElement, 38)
     textNodesFor('[tabindex="0"]').should.deep.equal(['cherry'])
     keydown(document.activeElement, 38)
@@ -114,8 +111,8 @@ describe('aria-listbox', function() {
     textNodesFor('[tabindex="0"]').should.deep.equal(['watermelon'])
     document.activeElement.textContent.should.equal('watermelon')
     keydown(document.activeElement, 38)
-    textNodesFor('[tabindex="0"]').should.deep.equal(['banana'])
-    document.activeElement.textContent.should.equal('banana')
+    textNodesFor('[tabindex="0"]').should.deep.equal(['cherry'])
+    document.activeElement.textContent.should.equal('cherry')
   })
 
   it('should not prevent the default for clicks and keydown events to allow other code to handle them to', function() {
@@ -133,20 +130,24 @@ describe('aria-listbox', function() {
   })
 
   describe('single select', function() {
-    it('should set aria-selected on an option when a child element of it is clicked', function() {
+    it('should set aria-selected on an option when a child element of it is clicked, if that item is not disabled', function() {
       testSetup()
+      click('li:first-child span')
+      selectedNodes().should.deep.equal(['cherry'])
       click('li:nth-child(2) span')
-      selectedNodes().should.deep.equal(['orange'])
+      selectedNodes().should.deep.equal(['cherry'])
       click('li:nth-child(4) span')
       selectedNodes().should.deep.equal(['watermelon'])
     })
 
     it('should set aria-selected on an option when it is clicked, clearing previous selections for single select', function() {
       testSetup()
+      click('li:first-child')
+      selectedNodes().should.deep.equal(['cherry'])
       click('li:nth-child(2)')
-      selectedNodes().should.deep.equal(['orange'])
-      click('li:nth-child(5)')
-      selectedNodes().should.deep.equal(['pineapple'])
+      selectedNodes().should.deep.equal(['cherry'])
+      click('li:nth-child(4)')
+      selectedNodes().should.deep.equal(['watermelon'])
     })
 
     it('should set aria-selected on the focused option when space or enter is pressed', function() {
@@ -162,11 +163,11 @@ describe('aria-listbox', function() {
       testSetup()
       testEl.addEventListener('selection-changed', listener)
 
-      click('li:nth-child(2) span')
+      click('li:first-child span')
       listener.should.have.been.calledOnce
       var event = listener.lastCall.args[0]
       event.selection.should.be.instanceOf(HTMLElement)
-      event.selection.textContent.should.equal('orange')
+      event.selection.textContent.should.equal('cherry')
       event.selection.tagName.should.equal('LI')
 
       click('li:nth-child(5)')
@@ -176,7 +177,7 @@ describe('aria-listbox', function() {
   })
 
   describe('multiselect', function() {
-    it('should set aria-selected on an option when it is clicked, leaving other selections', function() {
+    it('should set aria-selected on an option when it is clicked, leaving other selections and ignoring disabled elements', function() {
       testSetup({ multiselect: true })
 
       click('li:first-child')
@@ -197,6 +198,10 @@ describe('aria-listbox', function() {
       selectedNodes().should.deep.equal(['cherry', 'watermelon'])
       textNodesFor('[tabindex="0"]').should.deep.equal(['watermelon'])
 
+      click('li:nth-child(2)')
+      selectedNodes().should.deep.equal(['cherry', 'watermelon'])
+      textNodesFor('[tabindex="0"]').should.deep.equal(['watermelon'])
+
       click('li:first-child')
       selectedNodes().should.deep.equal(['watermelon'])
       textNodesFor('[tabindex="0"]').should.deep.equal(['watermelon'])
@@ -206,10 +211,13 @@ describe('aria-listbox', function() {
       textNodesFor('[tabindex="0"]').should.deep.equal(['watermelon'])
     })
 
-    it('should allow multiple items to be selected by keyboard', function() {
+    it('should allow multiple items to be selected by keyboard, ignoring disabled items', function() {
       testSetup({ multiselect: true })
 
       keydown('li:nth-child(4)', 13)
+      selectedNodes().should.deep.equal(['watermelon'])
+
+      keydown('li:nth-child(2)', 13)
       selectedNodes().should.deep.equal(['watermelon'])
 
       keydown('li:first-child span', 32)
@@ -219,25 +227,25 @@ describe('aria-listbox', function() {
     it('should toggle a selected item when selected by keyboard', function() {
       testSetup({ multiselect: true })
 
-      keydown('li:nth-child(2)', 32)
-      selectedNodes().should.deep.equal(['orange'])
-      textNodesFor('[tabindex="0"]').should.deep.equal(['orange'])
+      keydown('li:first-child', 32)
+      selectedNodes().should.deep.equal(['cherry'])
+      textNodesFor('[tabindex="0"]').should.deep.equal(['cherry'])
 
-      keydown('li:nth-child(3)', 13)
-      selectedNodes().should.deep.equal(['orange', 'banana'])
-      textNodesFor('[tabindex="0"]').should.deep.equal(['banana'])
-      document.activeElement.textContent.should.equal('banana')
+      keydown('li:nth-child(4)', 13)
+      selectedNodes().should.deep.equal(['cherry', 'watermelon'])
+      textNodesFor('[tabindex="0"]').should.deep.equal(['watermelon'])
+      document.activeElement.textContent.should.equal('watermelon')
 
-      keydown('li:nth-child(3)', 38)
-      keydown('li:nth-child(2) span', 13)
-      selectedNodes().should.deep.equal(['banana'])
-      textNodesFor('[tabindex="0"]').should.deep.equal(['orange'])
-      document.activeElement.textContent.should.equal('orange')
+      keydown('li:nth-child(4)', 38)
+      keydown('li:first-child span', 13)
+      selectedNodes().should.deep.equal(['watermelon'])
+      textNodesFor('[tabindex="0"]').should.deep.equal(['cherry'])
+      document.activeElement.textContent.should.equal('cherry')
 
-      keydown('li:nth-child(2)', 40)
-      keydown('li:nth-child(3)', 13)
+      keydown('li:first-child', 40)
+      keydown('li:nth-child(4)', 13)
       selectedNodes().should.be.empty
-      textNodesFor('[tabindex="0"]').should.deep.equal(['banana'])
+      textNodesFor('[tabindex="0"]').should.deep.equal(['watermelon'])
     })
 
     it('should fire an event when the selection changes with the NodeList of selections, and which element was added or removed', function() {
@@ -245,25 +253,25 @@ describe('aria-listbox', function() {
       testSetup({ multiselect: true })
       testEl.addEventListener('selection-changed', listener)
 
-      click('li:nth-child(2) span')
+      click('li:first-child span')
       listener.should.have.been.calledOnce
       var event = listener.lastCall.args[0]
       event.selection.should.be.instanceOf(NodeList)
       event.selection.should.have.length(1)
-      event.selection[0].textContent.should.equal('orange')
+      event.selection[0].textContent.should.equal('cherry')
       event.selection[0].tagName.should.equal('LI')
-      event.added.textContent.should.equal('orange')
+      event.added.textContent.should.equal('cherry')
 
       click('li:nth-child(5)')
       listener.should.have.been.calledTwice
       Array.prototype.map.call(listener.lastCall.args[0].selection, function(n) { return n.textContent })
-        .should.deep.equal(['orange', 'pineapple'])
+        .should.deep.equal(['cherry', 'pineapple'])
       listener.lastCall.args[0].added.textContent.should.equal('pineapple')
 
-      click('li:nth-child(2)')
+      click('li:first-child')
       Array.prototype.map.call(listener.lastCall.args[0].selection, function(n) { return n.textContent })
         .should.deep.equal(['pineapple'])
-      listener.lastCall.args[0].removed.textContent.should.equal('orange')
+      listener.lastCall.args[0].removed.textContent.should.equal('cherry')
 
       click('li:nth-child(5)')
       listener.lastCall.args[0].selection.should.be.empty

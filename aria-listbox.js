@@ -32,7 +32,7 @@
     if (firstSelected) {
       firstSelected.setAttribute('tabindex', '0')
     } else {
-      var options = el.querySelectorAll('[role="option"]')
+      var options = el.querySelectorAll('[role="option"]:not([aria-disabled="true"])')
       if (options.length) {
         options[0].setAttribute('tabindex', '0')
       }
@@ -45,6 +45,7 @@
     }
 
     function select(child) {
+      if (child.getAttribute('aria-disabled') === 'true') return
       var multiselect = el.getAttribute('aria-multiselect') === 'true', nextSelected
 
       if (!multiselect) {
@@ -90,7 +91,7 @@
 
     function handleKey(optionEl, code, keys, delta) {
       if (keys.indexOf(code) !== -1) {
-        var optionEls = el.querySelectorAll('[role="option"]'),
+        var optionEls = el.querySelectorAll('[role="option"]:not([aria-disabled="true"])'),
             idx = Array.prototype.indexOf.call(optionEls, optionEl)
 
         var next = optionEls[idx + delta]

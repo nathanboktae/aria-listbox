@@ -32,6 +32,7 @@ See [the tests](https://github.com/nathanboktae/aria-listbox/blob/master/tests/t
 <ul>
   <li role="option">Choice 1</li>
   <li role="option">Choice 2</li>
+  <li role="option" aria-disabled="true">Disabled Choice 3</li>
   <li>Not a choice</li>
 </ul>
 
@@ -58,7 +59,7 @@ ariaSelect(document.querySelector('ul'), { nextKeys: ['s', 'd', 37, 38], prevKey
 ariaSelect(document.querySelector('[aria-multiselect="true"]'), { nextKeys: 37, prevKeys: 39 })
 ```
 
-Since `aria-selected` does not keep state, you can change the options, what is selected, and even the multiselect mode at any time!
+Since `aria-selected` does not keep state, you can change the options, what is selected, what is disabled, and even the multiselect mode at any time!
 
 #### `selection-changed` Event
 
